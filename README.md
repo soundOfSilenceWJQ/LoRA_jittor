@@ -36,3 +36,6 @@ python src/gpt2_decode.py \
 
 4. 利用E2E数据集给出的评测程序进行评估，需要配置java环境
 python eval/e2e/measure_scores.py e2e_ref_jittor_MD.txt e2e_pred_jittor_MD.txt -p
+
+运行LoRA交互式应用的方法：
+LoRA_app基于flask框架搭建，进入LoRA_app目录下运行app.py开启后端，按终端提示打开浏览器即可看到前端页面展示
