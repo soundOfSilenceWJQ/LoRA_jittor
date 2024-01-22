@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gpt2 using LoRA on e2e Interactive Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            margin-top: 5px;
+        }
+
+        #output {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>gpt2 with LoRA Interactive Demo</h2>
+
+    <label for="selectCard">Select Card:</label>
+    <select id="selectCard">
+        <option value="gpt2-S">gpt2-S</option>
+        <option value="gpt2-M">gpt2-M</option>
+        <option value="gpt2-L">gpt2-L</option>
+    </select>
+
+    <label for="input1">name:</label>
+    <input type="text" id="input1">
+
+    <label for="input2">Type:</label>
+    <input type="text" id="input2">
+
+    <label for="input3">area:</label>
+    <input type="text" id="input3">
+
+    <label for="input4">customer_rating:</label>
+    <input type="text" id="input4">
+
+    <label for="input5">near:</label>
+    <input type="text" id="input5">
+
+    <label for="input6">food:</label>
+    <input type="text" id="input6">
+
+    <button onclick="submitData()">Submit</button>
+
+    <div id="output"></div>
+    <div id="loading" style="display: none;">Please wait...</div>
+
+    <script>
+        function submitData() {
+            var selectedCard = document.getElementById("selectCard").value;
+            var input1Value = document.getElementById("input1").value;
+            var input2Value = document.getElementById("input2").value;
+            var input3Value = document.getElementById("input3").value;
+            var input4Value = document.getElementById("input4").value;
+            var input5Value = document.getElementById("input5").value;
+            var input6Value = document.getElementById("input6").value;
+
+            var requestData = {
+                gptcard: selectedCard,
+                name: input1Value,
+                type: input2Value,
+                area: input3Value,
+                customer_rating: input4Value,
+                near: input5Value,
+                food: input6Value
+            };
+
+            // 显示 "请等待" 提示
+            var loadingDiv = document.getElementById("loading");
+            loadingDiv.style.display = "block";
+
+            fetch('/process_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 隐藏 "请等待" 提示
+                loadingDiv.style.display = "none";
+
+                var outputDiv = document.getElementById("output");
+                outputDiv.style.display = "block";
+                outputDiv.innerHTML = "<strong>" + data.name + "</strong><br>" + data.sentence;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
